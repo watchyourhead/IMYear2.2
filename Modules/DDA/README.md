@@ -9,8 +9,9 @@ Welcome to DDA. This is a module that covers databases. We will be using Firebas
 [Firebase Unity Setup Guide WIP] ()
 
 ## References & Resources
-[Firebase] (https://firebase.google.com/)
-[Firebase Documentation] (https://firebase.google.com/docs)
-[Official Firebase Unity Quickstarts] (https://github.com/firebase/quickstart-unity)
-[Github Desktop] (https://desktop.github.com/)
-[Bluestacks for Mobile Emulator] (https://www.bluestacks.com/)
+- [Firebase] (https://firebase.google.com/)
+- [Firebase Documentation] (https://firebase.google.com/docs)
+- [Official Firebase Unity Quickstarts] (https://github.com/firebase/quickstart-unity)
+- [Setting up Firebase with Unity] (https://firebase.google.com/docs/unity/setup)
+- [Github Desktop] (https://desktop.github.com/)
+- [Bluestacks for Mobile Emulator] (https://www.bluestacks.com/)
