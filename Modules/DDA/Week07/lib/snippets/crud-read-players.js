@@ -50,16 +50,16 @@ function getPlayerData(e) {
         //let's do something about it
         var playerContent = document.getElementById("player-content");
         var totalPlayers = document.getElementById("total-players");
+        
+        //base table content string 
         var content = "";
         console.log(`Number of Players: ${snapshot.size}`);
         
         snapshot.forEach((childSnapshot) => {
           //looping through each snapshot
-
           //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
           //console.log("User key: " + childSnapshot.key);
           //console.log("Username: " + childSnapshot.child("username").val());
-
           content += `<tr>
           <td>${childSnapshot.child("active").val()}</td>
           <td>${childSnapshot.child("clan").val()}</td>

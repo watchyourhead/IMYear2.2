@@ -25,7 +25,6 @@ get(dailyActiveUsers).then((snapshot) => {
     //if the data exist
     try {
       var content = "";
-      console.log(`Number of Players: ${snapshot.size}`);
       //setup our temp arrays 
       var dates = [];
       var logs = [];
@@ -78,5 +77,4 @@ function makeChart(dates, logData) {
   //charting size
   myChart.canvas.parentNode.style.height = '800px';
   myChart.canvas.parentNode.style.width = '800px';
- 
 }
