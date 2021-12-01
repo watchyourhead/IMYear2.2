@@ -2,8 +2,8 @@ import {
   getAuth,
   setPersistence,
   signInWithEmailAndPassword,
-  browserSessionPersistence,
-  inMemoryPersistence,
+  browserSessionPersistence,//just current usage
+  inMemoryPersistence,//no persistence
   browserLocalPersistence, //default
 } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
 
