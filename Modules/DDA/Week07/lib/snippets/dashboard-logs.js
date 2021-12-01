@@ -17,24 +17,23 @@ const db = getDatabase();
 //=================================================
 const dailyActiveUsers = ref(db, "dailyActiveUsers");
 
+//[STEP 3] Retrieve our data
+//=================================================
 get(dailyActiveUsers).then((snapshot) => {
   //retrieve a snapshot of the data using a callback
   if (snapshot.exists()) {
     //if the data exist
     try {
-      //let's do something about it
-      //var playerContent = document.getElementById("player-content");
-      //var totalPlayers = document.getElementById("total-players");
       var content = "";
       console.log(`Number of Players: ${snapshot.size}`);
+      //setup our temp arrays 
       var dates = [];
       var logs = [];
       snapshot.forEach((childSnapshot) => {
-        console.log(`looping child`);
-        console.log(`Number of Players: ${childSnapshot.key}`);
-
+        //push data to our arrays for our X/Y axes later
         dates.push(childSnapshot.key);
         logs.push(childSnapshot.size);
+        console.log(`Number of Players: ${childSnapshot.key}`);
         console.log(`looping child size:  ${childSnapshot.size}`);
       });
       makeChart(dates, logs);
@@ -42,8 +41,11 @@ get(dailyActiveUsers).then((snapshot) => {
   }
 }); //end get
 
+//[STEP 4] Make our chart
+//=================================================
 function makeChart(dates, logData) {
   console.log(logData);
+  //based on the canvas ID 
   const ctx = document.getElementById("myChart").getContext("2d");
   const myChart = new Chart(ctx, {
     type: "line",
@@ -73,6 +75,7 @@ function makeChart(dates, logData) {
       },
     },
   });
+  //charting size
   myChart.canvas.parentNode.style.height = '800px';
   myChart.canvas.parentNode.style.width = '800px';
  
