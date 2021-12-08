@@ -10,6 +10,7 @@ import {
   onValue,
   orderByChild,
   orderByValue,
+  orderByKey,
   query,
   equalTo,
   startAt,
@@ -49,12 +50,17 @@ const playerError = document.getElementById("player-error");
 const errorMsg = document.getElementById("error-msg");
 const successMsg = document.getElementById("success-msg");
 
+const playerStatRef = ref(db, "playerStats");
+const levelCompletionLogsRef = ref(db, "levelCompletionLogs");
+const playerRef = ref(db, `players`);
 //Call and initialize our data -----
 getAllPlayerData();
 getLatestPlayer();
 
+
 //[STEP 3: setup event listener to login button]
 //=================================================
+/*
 let btnSignup = document.getElementById("btn-signup");
 btnSignup.addEventListener("click", function (e) {
   e.preventDefault();
@@ -65,8 +71,9 @@ btnSignup.addEventListener("click", function (e) {
   console.log(`Sign-ing up user with ${email} and password ${password}`);
   //[STEP 4: Signup our user]
   signUpUserWithEmailAndPassword(email, password, username);
-});
+});*/
 
+/*
 let btnSignOut = document.getElementById("btn-signout");
 btnSignOut.addEventListener("click", function (e) {
   e.preventDefault();
@@ -92,12 +99,15 @@ btnShowUpdateProfile.addEventListener("click", function (e) {
 
   //update details when click on submit
 });
+*/
 
 //playerprofile form listener
 //process player profile updates once clicked
 let btnUpdatePlayerProfile = document.getElementById(
   "btn-update-player-profile"
 );
+
+/*
 btnUpdatePlayerProfile.addEventListener("click", function (e) {
   e.preventDefault();
 
@@ -122,7 +132,7 @@ btnUpdatePlayerProfile.addEventListener("click", function (e) {
     //once done show msg
     successMsg.innerHTML = `Player Profile updated`;
   }
-});
+});*/
 
 //setup observer to listen to auth changes
 onAuthStateChanged(auth, (user) => {
@@ -288,6 +298,7 @@ function updatePlayerEmail(newEmail) {
     });
 }
 
+console.log("getplayer data");
 //get the latest player that was added
 async function getLatestPlayer() {
   const latestPlayerRef = query(
@@ -308,11 +319,13 @@ async function getLatestPlayer() {
     console.log(latestPlayer.active);
 
     //Update our UI
+    /*
     document.getElementById("latest-player").innerHTML = 
         `Player Name: ${latestPlayer.displayName} <br/>
          Created On: ${latestPlayer.createdOn} <br/>
          Email: ${latestPlayer.email} <br/>
          Last Logged In: ${latestPlayer.lastLoggedIn}`;
+    */
 
     //METHOD 3: run a loop
     //let latestPlayer = result.val();
@@ -320,8 +333,116 @@ async function getLatestPlayer() {
     //console.log(childSnapshot.key);
     //});
   }
+}//end getLatestPlayer
+
+
+//jquery way
+//$("#btn-read").on("click", getPlayerData());
+console.log("getplayer data");
+
+
+
+//Player Levels -----------------------------------
+//=================================================
+
+const MAX_LEVEL = 20;
+const BASE_LEVEL = 1;
+
+getPlayerLevelData();
+
+//Setup our player levels function to display info
+//READING: https://stackoverflow.com/questions/55458675/filter-is-not-a-function
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values
+//=================================================
+async function getPlayerLevelData(baseLevel = BASE_LEVEL, maxLevel = MAX_LEVEL) {
+  console.log("attempting to get player level content");
+
+  const playerLevelRef = query(ref(db, "playerStats"), orderByChild("level"));
+
+  let totalPlayers = await getTotalPlayers();
+  let snapshot = await get(playerLevelRef);
+  let levelLogs = await getLevelCompletionLogs();
+
+
+  let playerContent = document.getElementById("player-level-content");
+  let totalPlayersContent = document.getElementById("total-players");
+  if (snapshot.exists()) {
+    try {
+      //if the data exist
+      let players = snapshot.val();
+      let tableData = "";
+      for (var i = baseLevel; i <= maxLevel; i++) {
+        var filterPlayersLevel = Object.values(players).filter(
+          (player) => player.level === i
+        );
+
+        var levelCompletedContent = "";
+        if(levelLogs[i-1] !== undefined){
+            levelCompletedContent += levelLogs[i-1].completed;
+        }else{
+            levelCompletedContent = 0;
+        }
+
+        tableData += `<tr>
+                        <td>${i}</td>
+                        <td>
+                        <div class="progress radius-10" style="height:4.5px;">
+                          <div class="progress-bar bg-primary" role="progressbar" style="width: ${levelCompletedContent/totalPlayers * 100}%"></div>
+                        </div>
+                        
+                        ${levelCompletedContent}</td>
+                        <td>
+                          <div class="progress radius-10" style="height:4.5px;">
+													  <div class="progress-bar bg-primary" role="progressbar" style="width: ${filterPlayersLevel.length/totalPlayers * 100}%"></div>
+												  </div>
+                          ${filterPlayersLevel.length}
+                        </td>
+                        <td>
+                          <div class="progress radius-10" style="height:4.5px;">
+													  <div class="progress-bar bg-primary" role="progressbar" style="width: ${filterPlayersLevel.length/totalPlayers * 100}%"></div>
+												  </div>
+                          ${filterPlayersLevel.length/totalPlayers * 100}%
+                          </td>
+                        </tr>`;
+        //console.log(`Number of players at level ${i}: ${filterPlayersLevel.length}`);
+        //console.log(`% of players at level ${i}: ${filterPlayersLevel.length/totalPlayers*100} %`);
+       }//end loop
+      console.log(`Total number of player stats: ${snapshot.size}`);
+      console.log(`total Players in Game: ${totalPlayers}`);
+      console.log(`Data discrepencies: ${totalPlayers - snapshot.size}`);
+      
+      //update UI
+      playerContent.innerHTML = tableData;
+      totalPlayersContent.innerHTML = `Total Players: ${totalPlayers}`;
+
+    } catch (error) {
+        console.log("Error getPlayerLevelData" + error);
+    }
+  }
 }
 
+async function getTotalPlayers() {
+  var totalPlayers = await get(playerRef);
+  return totalPlayers.size;
+}
+
+async function getLevelCompletionLogs(){
+    const playerLevelCompletionRef = query(levelCompletionLogsRef, orderByKey());
+    let levelCompletionList = [];
+
+    let levelCompletionLogs = await get(levelCompletionLogsRef);
+    if(levelCompletionLogs !== null){
+        
+        levelCompletionLogs.forEach((childSnapshot) => {
+            console.log(`Level ${childSnapshot.key}: ${childSnapshot.size}`);
+            console.log("running level list ");
+            levelCompletionList.push({"level": childSnapshot.key, "completed": childSnapshot.size});
+        });
+    }
+    return levelCompletionList;
+}
+
+//------------------------------------
 //function based object for our player
 function Player(userName, email, clan = "blue") {
   let currentTimeStamp = Date.now();
