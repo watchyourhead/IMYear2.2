@@ -30,22 +30,41 @@
   <div id="success-msg"></div>
   <div class="container" id="auth-forms">
     <form id="signup-form">
-      <input type="email" id="signup-email" placeholder="Enter your email">
-      <input type="password" id="signup-password" placeholder="Enter your password">
-      <input type="text" id="signup-username" placeholder="username">
-      <input type="button" value="Sign Up" id="btn-signup">
+      <h4>Sign Up Form</h4>
+      <div class="mb-3">
+        <label class="form-label">Email: </label>
+        <input type="email" id="signup-email" placeholder="Enter your email" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password: </label>
+        <input type="password" id="signup-password" placeholder="Enter your password" class="form-control" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Username: </label>
+        <input type="text" id="signup-username" placeholder="Enter username" class="form-control" required>
+      </div>
+      <input type="button" value="Sign Up" id="btn-signup" class="btn btn-primary">
     </form>
     <form id="login-form">
-      <input type="email" id="login-email" placeholder="Enter your email">
-      <input type="password" id="login-password" placeholder="Enter your password">
-      <input type="button" value="Log In" id="btn-login">
+      <h4>Login Form</h4>
+      <div class="mb-3">
+        <label class="form-label">Email: </label>
+        <input type="email" id="login-email" placeholder="Enter your email" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password: </label>
+        <input type="password" id="login-password" placeholder="Enter your password" class="form-control">
+      </div>
+      <div class="mb-3">
+        <input type="button" value="Log In" id="btn-login" class="btn btn-primary form-control">
+      </div>
     </form>
     <form id="update-form">
-      <input type="email" id="update-email" placeholder="Enter your email">
-      <input type="password" id="update-password" placeholder="Enter your password">
-      <input type="password" id="update-repeat-password" placeholder="Repeat your password">
-      <input type="text" id="update-username" placeholder="username">
-      <input type="submit" id="btn-update-player-profile" value="Update">
+      <input type="email" id="update-email" placeholder="Enter your email" class="form-control">
+      <input type="password" id="update-password" placeholder="Enter your password" class="form-control">
+      <input type="password" id="update-repeat-password" placeholder="Repeat your password" class="form-control">
+      <input type="text" id="update-username" placeholder="username" class="form-control">
+      <input type="submit" id="btn-update-player-profile" value="Update" class="form-control">
     </form>
     <a href="#" id="btn-signout" class="btn btn-primary">Sign Out</a>
     <a href="#" id="btn-update-profile" class="btn btn-success">Update Profile</a>

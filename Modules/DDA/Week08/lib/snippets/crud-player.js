@@ -198,6 +198,7 @@ function getAllPlayerData() {
         //base table content string
         var content = "";
         console.log(`Number of Players: ${snapshot.size}`);
+        const options = {  year: 'numeric', month: 'numeric', day: 'numeric' };
 
         snapshot.forEach((childSnapshot) => {
           //looping through each snapshot
@@ -210,8 +211,8 @@ function getAllPlayerData() {
         <td>${childSnapshot.child("createdOn").val()}</td>
         <td>${childSnapshot.child("displayName").val()}</td>
         <td>${childSnapshot.child("email").val()}</td>
-        <td>${new Date(childSnapshot.child("lastLoggedIn").val() * 1000)}</td>
-        <td>${new Date(childSnapshot.child("updatedOn").val() * 1000)}}</td>
+        <td>${new Date(childSnapshot.child("lastLoggedIn").val() * 1000).toLocaleDateString('en-sg',options)}</td>
+        <td>${new Date(childSnapshot.child("updatedOn").val() * 1000).toLocaleDateString("en-sg", options)}}</td>
         <td>${childSnapshot.child("userName").val()}</td>
         <td><a href="#" class="btn btn-primary" id="${
           childSnapshot.key
@@ -232,7 +233,6 @@ function getAllPlayerData() {
 }
 
 /*
- 
  reference: https://firebase.google.com/docs/auth/web/manage-users#update_a_users_profile
 */
 function updateUserDisplayName(newDisplayName) {
@@ -250,6 +250,7 @@ function updateUserDisplayName(newDisplayName) {
     });
 }
 
+//update logged in user password
 function updatePlayerPassword(newPassword) {
   updatePassword(auth.currentUser, newPassword)
     .then(() => {
@@ -345,9 +346,10 @@ function showLoggedInUI() {
 }
 
 function showNotLoggedInUI() {
+  
   document.getElementById("signup-form").style.display = "block";
   document.getElementById("login-form").style.display = "block";
-  document.getElementById("update-form").style.display = "block";
+  document.getElementById("update-form").style.display = "none";
   document.getElementById("btn-signout").style.display = "none";
   document.getElementById("btn-update-profile").style.display = "none";
 }
